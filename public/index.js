@@ -13,6 +13,7 @@ fetch('http://localhost:8080/products')
         <td>${product.title}</td>
         <td>${product.price}</td>
         <td><img src="${product.image}" width="100px" /></td>
+        <td><a class='btn btn-danger'>borrar</a></td>
       </tr>
         `
 
@@ -37,6 +38,8 @@ fetch('http://localhost:8080/products')
         <td>${product.title}</td>
         <td>${product.price}</td>
         <td><img src="${product.image}" width="100px" /></td>
+        <td><a href="borrarProduct/${product.id}" class='btn btn-danger'><i class='fa fa-trash' aria-hidden='true'></i></a></td>
+
       </tr>
         `
 

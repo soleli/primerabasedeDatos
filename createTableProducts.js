@@ -1,12 +1,9 @@
-const { options } = require('./db/mysql')
-// const { options } = require('./db/sqlite')
-
-const knex = require('knex')(options)
-
-knex
+const db = require('./db/mysql')
+ 
+db
 .schema.createTable('products', table => {
       table.increments('id')
-      table.string('name', 30)
+      table.string('title', 30)
       table.float('price')
       table.string('image', 255)
     })
@@ -14,4 +11,4 @@ knex
     console.log('Tabla de productos creada')
   })
   .catch(err => console.log(`Error: ${err.message}`))
-  .finally(() => knex.destroy())
+  .finally(() => db.destroy())
