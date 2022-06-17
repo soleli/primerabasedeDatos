@@ -30,10 +30,7 @@ router.post('/createProduct', (req, res) => {
         error: 'Error de servidor'
       })
     })
-    //productos.push(newProduct);
-    //io.emit('newProduct', newProduct)
-
-    //return res.json(productos)
+    
 })
 
 router.get('/products', (req, res) => {

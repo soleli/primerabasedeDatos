@@ -2,25 +2,46 @@ const express = require('express')
 const router = express.Router();
 const path = require('path');
 const fs = require("fs");
-let messageFilePath = path.join(__dirname, '../message.json');
+const db = require('../db/sqlite')
 
-const message = JSON.parse(fs.readFileSync(messageFilePath, 'utf-8'));
+//let messageFilePath = path.join(__dirname, '../message.json');
+
+//const message = JSON.parse(fs.readFileSync(messageFilePath, 'utf-8'));
 
 router.get('/', (req, res) => {
-    return res.json(message)
+    console.log("auu")
+
+    return db.from('messages').select('*')
+      .then(messagess => {
+          console.log(messagess)
+        return res.json(messagess)
+      })
+      .catch(err => {
+        console.log(err)
+        return res.status(500).json({
+          error: 'Error de servidor'
+        })
+      })
+    
 })
 router.post('/create', (req, res) => {
-    var io2=req.app.get('socket')
+    var io=req.app.get('socket')
     let newMessage = {
-        id: message.length + 1,
         ...req.body,
     };
-    message.push(newMessage);
-    fs.writeFileSync(messageFilePath, JSON.stringify(message, null , ' '));
-//    io2.emit('newMyMessage', newMessage);
-console.log("mi"+io2.id)
-   io2.broadcast.emit('newMessage', newMessage);
-    return res.json(newMessage)
+    return db.from('messages').insert(newMessage)
+    .then((msg) => {
+        console.log(msg)
+        io.emit('newMessage', newMessage);
+        return res.json(newMessage)
+    })
+    .catch(err => {
+      console.log(err)
+      return res.status(500).json({
+        error: 'Error de servidor'
+      })
+    })
+
 })
 
 
